@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  api:
+    build: .
+    command: python run.py
+    ports:
+      - "5000:5000"

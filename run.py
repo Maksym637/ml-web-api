@@ -8,4 +8,4 @@ app.register_blueprint(ai_model)
 CORS(app)
 
 if __name__ == "__main__":
-    app.run(host="localhost", port=8000, debug=True)
+    app.run(debug=True, host='0.0.0.0')

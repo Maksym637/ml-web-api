@@ -28,7 +28,7 @@ def decode_batch_predictions(pred):
         res = tf.gather(res, tf.where(tf.math.not_equal(res, -1)))
         res = tf.strings.reduce_join(numbers_to_characters(res)).numpy().decode("utf-8")
         output_text.append(res)
-      
+
     return output_text
 
 def encode_single_sample_image(img_path):

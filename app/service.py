@@ -21,7 +21,7 @@ def predict_captcha_lstm_1():
     file = request.files['image']
 
     if not file:
-        return Response(response="No CAPTCHA uploaded", status=400)
+        return Response(response="[No CAPTCHA uploaded]", status=400)
 
     filename = secure_filename(file.filename)
     file_path = os.path.join(STORAGE_PATH, filename)
@@ -45,4 +45,3 @@ def predict_captcha_bilstm_1():
 @ai_model.route("/bilstm2", methods=["POST"])
 def predict_captcha_bilstm_2():
     pass
-
