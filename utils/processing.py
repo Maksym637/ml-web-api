@@ -3,7 +3,7 @@ import string
 import numpy as np
 
 import tensorflow as tf
-from keras import layers, backend
+from keras import layers, backend, models
 from .constants import MAX_LENGTH, IMAGE_WIDTH, IMAGE_HEIGHT, BATCH_SIZE
 
 CHARACTERS = sorted(list(string.ascii_lowercase) + list(string.digits))
@@ -15,6 +15,9 @@ characters_to_numbers = layers.StringLookup(
 numbers_to_characters = layers.StringLookup(
     vocabulary=characters_to_numbers.get_vocabulary(), mask_token=None, invert=True
 )
+
+def define_model(model):
+    return models.Model(model.get_layer(name="image").input, model.get_layer(name="dense2").output)
 
 def decode_batch_predictions(pred):
     input_len = np.ones(pred.shape[0]) * pred.shape[1]
