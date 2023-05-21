@@ -47,8 +47,8 @@ def predict_captcha_lstm_1():
     return jsonify(response_data)
 
 @ai_model.route("/lstm2", methods=["POST"])
-def predict_captcha_lstm_2(uid):
-    file = request.files["image"]
+def predict_captcha_lstm_2():
+    file = request.files.get("image")
     uid = request.args.get("uid")
 
     if not file:
@@ -71,8 +71,8 @@ def predict_captcha_lstm_2(uid):
     return jsonify(response_data)
 
 @ai_model.route("/bilstm1", methods=["POST"])
-def predict_captcha_bilstm_1(uid):
-    file = request.files["image"]
+def predict_captcha_bilstm_1():
+    file = request.files.get("image")
     uid = request.args.get("uid")
 
     if not file:
@@ -93,8 +93,8 @@ def predict_captcha_bilstm_1(uid):
     return jsonify(response_data)
 
 @ai_model.route("/bilstm2", methods=["POST"])
-def predict_captcha_bilstm_2(uid):
-    file = request.files["image"]
+def predict_captcha_bilstm_2():
+    file = request.files.get("image")
     uid = request.args.get("uid")
 
     if not file:
