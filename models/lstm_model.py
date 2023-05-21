@@ -3,7 +3,6 @@ from utils.constants import IMAGE_WIDTH, IMAGE_HEIGHT, NEW_SHAPE
 from utils.processing import characters_to_numbers
 from .ctc_layer import CTCLayer
 
-
 def initialize_LSTM_1():
     labels = layers.Input(name="label", shape=(None,), dtype="float32")
     model = Sequential([

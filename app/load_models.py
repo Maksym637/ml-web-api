@@ -7,17 +7,22 @@ from utils.constants import (
 )
 from utils.processing import define_model
 
-lstm_1, lstm_2 = initialize_LSTM_1(), initialize_LSTM_2()
-bilstm_1, bilstm_2 = initialize_BiLSTM_1(), initialize_BiLSTM_2()
+def load_lstm_1():
+    model = initialize_LSTM_1()
+    model.load_weights(WEIGHTS_PATH_LSTM_1)
+    return define_model(model)
 
-# lstm_1.load_weights(WEIGHTS_PATH_LSTM_1)
-# defined_lstm_1 = define_model(lstm_1)
+def load_lstm_2():
+    model = initialize_LSTM_2()
+    model.load_weights(WEIGHTS_PATH_LSTM_2)
+    return define_model(model)
 
-# lstm_2.load_weights(WEIGHTS_PATH_LSTM_2)
-# defined_lstm_2 = define_model(lstm_2)
+def load_bilstm_1():
+    model = initialize_BiLSTM_1()
+    model.load_weights(WEIGHTS_PATH_BiLSTM_1)
+    return define_model(model)
 
-# bilstm_1.load_weights(WEIGHTS_PATH_BiLSTM_1)
-# defined_bilstm_1 = define_model(bilstm_1)
-
-bilstm_2.load_weights(WEIGHTS_PATH_BiLSTM_2)
-defined_bilstm_2 = define_model(bilstm_2)
+def load_bilstm_2():
+    model = initialize_BiLSTM_2()
+    model.load_weights(WEIGHTS_PATH_BiLSTM_2)
+    return define_model(model)
