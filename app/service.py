@@ -22,8 +22,8 @@ def clear_storage():
     for file in os.listdir(directory):
         os.remove(os.path.join(directory, file))
 
-@ai_model.route("/lstm1", methods=["POST"])
-def predict_captcha_lstm_1():
+@ai_model.route("/lstm1/<int:uid>", methods=["POST"])
+def predict_captcha_lstm_1(uid):
     file = request.files["image"]
 
     if not file:
@@ -38,10 +38,10 @@ def predict_captcha_lstm_1():
 
     clear_storage()
 
-    return jsonify({"prediction": predicted_text})
+    return jsonify({"model": "1 layer LSTM", "prediction": predicted_text, "uid": uid})
 
-@ai_model.route("/lstm2", methods=["POST"])
-def predict_captcha_lstm_2():
+@ai_model.route("/lstm2/<int:uid>", methods=["POST"])
+def predict_captcha_lstm_2(uid):
     file = request.files["image"]
 
     if not file:
@@ -56,10 +56,10 @@ def predict_captcha_lstm_2():
 
     clear_storage()
 
-    return jsonify({"prediction": predicted_text})
+    return jsonify({"model": "2 layers LSTM", "prediction": predicted_text, "uid": uid})
 
-@ai_model.route("/bilstm1", methods=["POST"])
-def predict_captcha_bilstm_1():
+@ai_model.route("/bilstm1/<int:uid>", methods=["POST"])
+def predict_captcha_bilstm_1(uid):
     file = request.files["image"]
 
     if not file:
@@ -74,10 +74,10 @@ def predict_captcha_bilstm_1():
 
     clear_storage()
 
-    return jsonify({"prediction": predicted_text})
+    return jsonify({"model": "1 layer BiLSTM", "prediction": predicted_text, "uid": uid})
 
-@ai_model.route("/bilstm2", methods=["POST"])
-def predict_captcha_bilstm_2():
+@ai_model.route("/bilstm2/<int:uid>", methods=["POST"])
+def predict_captcha_bilstm_2(uid):
     file = request.files["image"]
 
     if not file:
@@ -92,4 +92,4 @@ def predict_captcha_bilstm_2():
 
     clear_storage()
 
-    return jsonify({"prediction": predicted_text})
+    return jsonify({"model": "2 layers BiLSTM", "prediction": predicted_text, "uid": uid})
