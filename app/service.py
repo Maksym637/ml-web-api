@@ -24,7 +24,7 @@ def clear_storage():
 
 @ai_model.route("/lstm1", methods=["POST"])
 def predict_captcha_lstm_1():
-    file = request.files.get("image")
+    file = request.files.get("file")
     uid = request.args.get("uid")
 
     if not file:
@@ -48,7 +48,7 @@ def predict_captcha_lstm_1():
 
 @ai_model.route("/lstm2", methods=["POST"])
 def predict_captcha_lstm_2():
-    file = request.files.get("image")
+    file = request.files.get("file")
     uid = request.args.get("uid")
 
     if not file:
@@ -72,7 +72,7 @@ def predict_captcha_lstm_2():
 
 @ai_model.route("/bilstm1", methods=["POST"])
 def predict_captcha_bilstm_1():
-    file = request.files.get("image")
+    file = request.files.get("file")
     uid = request.args.get("uid")
 
     if not file:
@@ -94,7 +94,7 @@ def predict_captcha_bilstm_1():
 
 @ai_model.route("/bilstm2", methods=["POST"])
 def predict_captcha_bilstm_2():
-    file = request.files.get("image")
+    file = request.files.get("file")
     uid = request.args.get("uid")
 
     if not file:
