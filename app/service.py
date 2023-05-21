@@ -22,9 +22,10 @@ def clear_storage():
     for file in os.listdir(directory):
         os.remove(os.path.join(directory, file))
 
-@ai_model.route("/lstm1/<int:uid>", methods=["POST"])
-def predict_captcha_lstm_1(uid):
-    file = request.files["image"]
+@ai_model.route("/lstm1", methods=["POST"])
+def predict_captcha_lstm_1():
+    file = request.files.get("image")
+    uid = request.args.get("uid")
 
     if not file:
         return Response(response="[No CAPTCHA uploaded]", status=400)
@@ -38,11 +39,17 @@ def predict_captcha_lstm_1(uid):
 
     clear_storage()
 
-    return jsonify({"model": "1 layer LSTM", "prediction": predicted_text, "uid": uid})
+    response_data = {"model": "1 layer LSTM", "prediction": predicted_text}
 
-@ai_model.route("/lstm2/<int:uid>", methods=["POST"])
+    if uid:
+        response_data["uid"] = uid
+
+    return jsonify(response_data)
+
+@ai_model.route("/lstm2", methods=["POST"])
 def predict_captcha_lstm_2(uid):
     file = request.files["image"]
+    uid = request.args.get("uid")
 
     if not file:
         return Response(response="[No CAPTCHA uploaded]", status=400)
@@ -56,11 +63,17 @@ def predict_captcha_lstm_2(uid):
 
     clear_storage()
 
-    return jsonify({"model": "2 layers LSTM", "prediction": predicted_text, "uid": uid})
+    response_data = {"model": "1 layer LSTM", "prediction": predicted_text}
 
-@ai_model.route("/bilstm1/<int:uid>", methods=["POST"])
+    if uid:
+        response_data["uid"] = uid
+
+    return jsonify(response_data)
+
+@ai_model.route("/bilstm1", methods=["POST"])
 def predict_captcha_bilstm_1(uid):
     file = request.files["image"]
+    uid = request.args.get("uid")
 
     if not file:
         return Response(response="[No CAPTCHA uploaded]", status=400)
@@ -72,13 +85,17 @@ def predict_captcha_bilstm_1(uid):
     prediction = BiLSTM_1.predict(prepare_data(file_path))
     predicted_text = decode_batch_predictions(prediction)
 
-    clear_storage()
+    response_data = {"model": "1 layer LSTM", "prediction": predicted_text}
 
-    return jsonify({"model": "1 layer BiLSTM", "prediction": predicted_text, "uid": uid})
+    if uid:
+        response_data["uid"] = uid
 
-@ai_model.route("/bilstm2/<int:uid>", methods=["POST"])
+    return jsonify(response_data)
+
+@ai_model.route("/bilstm2", methods=["POST"])
 def predict_captcha_bilstm_2(uid):
     file = request.files["image"]
+    uid = request.args.get("uid")
 
     if not file:
         return Response(response="[No CAPTCHA uploaded]", status=400)
@@ -92,4 +109,9 @@ def predict_captcha_bilstm_2(uid):
 
     clear_storage()
 
-    return jsonify({"model": "2 layers BiLSTM", "prediction": predicted_text, "uid": uid})
+    response_data = {"model": "1 layer LSTM", "prediction": predicted_text}
+
+    if uid:
+        response_data["uid"] = uid
+
+    return jsonify(response_data)
