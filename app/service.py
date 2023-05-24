@@ -1,3 +1,5 @@
+"""This module contains all API endpoints."""
+
 import os
 
 from flask import jsonify, request
@@ -14,86 +16,68 @@ from app.load_models import (
 
 ai_model = Blueprint("ai_service", __name__)
 
-LSTM_1, LSTM_2 = load_lstm_1(), load_lstm_2() 
-BiLSTM_1, BiLSTM_2 = load_bilstm_1(), load_bilstm_2()
+LSTM_1, LSTM_2 = load_lstm_1(), load_lstm_2()
+BILSTM_1, BILSTM_2 = load_bilstm_1(), load_bilstm_2()
 
 def clear_storage():
+    """
+    Clear the storage directory.
+    """
     directory = STORAGE_PATH
     for file in os.listdir(directory):
         os.remove(os.path.join(directory, file))
 
 @ai_model.route("/lstm1", methods=["POST"])
 def predict_captcha_lstm_1():
-    file = request.files.get("file")
-    uid = request.form.get("uid")
+    """
+    Predict the CAPTCHA using model with 1 layer LSTM.
 
-    if not file:
-        return Response(response="[No CAPTCHA uploaded]", status=400)
-
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(STORAGE_PATH, filename)
-    file.save(file_path)
-
-    prediction = LSTM_1.predict(prepare_data(file_path))
-    predicted_text = decode_batch_predictions(prediction)
-
-    clear_storage()
-
-    response_data = {"model": "1 layer LSTM", "prediction": str(*predicted_text)}
-
-    if uid:
-        response_data["uid"] = uid
-
-    return jsonify(response_data)
+    Returns:
+        A JSON response containing the predicted CAPTCHA text.
+    """
+    return predict_captcha("1 layer LSTM", "LSTM_1")
 
 @ai_model.route("/lstm2", methods=["POST"])
 def predict_captcha_lstm_2():
-    file = request.files.get("file")
-    uid = request.form.get("uid")
+    """
+    Predict the CAPTCHA using model with 2 layers LSTM.
 
-    if not file:
-        return Response(response="[No CAPTCHA uploaded]", status=400)
-
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(STORAGE_PATH, filename)
-    file.save(file_path)
-
-    prediction = LSTM_2.predict(prepare_data(file_path))
-    predicted_text = decode_batch_predictions(prediction)
-
-    clear_storage()
-
-    response_data = {"model": "1 layer LSTM", "prediction": str(*predicted_text)}
-
-    if uid:
-        response_data["uid"] = uid
-
-    return jsonify(response_data)
+    Returns:
+        A JSON response containing the predicted CAPTCHA text.
+    """
+    return predict_captcha("2 layers LSTM", "LSTM_2")
 
 @ai_model.route("/bilstm1", methods=["POST"])
 def predict_captcha_bilstm_1():
-    file = request.files.get("file")
-    uid = request.form.get("uid")
+    """
+    Predict the CAPTCHA using model with 1 layer BiLSTM.
 
-    if not file:
-        return Response(response="[No CAPTCHA uploaded]", status=400)
-
-    filename = secure_filename(file.filename)
-    file_path = os.path.join(STORAGE_PATH, filename)
-    file.save(file_path)
-
-    prediction = BiLSTM_1.predict(prepare_data(file_path))
-    predicted_text = decode_batch_predictions(prediction)
-
-    response_data = {"model": "1 layer LSTM", "prediction": str(*predicted_text)}
-
-    if uid:
-        response_data["uid"] = uid
-
-    return jsonify(response_data)
+    Returns:
+        A JSON response containing the predicted CAPTCHA text.
+    """
+    return predict_captcha("1 layer BiLSTM", "BILSTM_1")
 
 @ai_model.route("/bilstm2", methods=["POST"])
 def predict_captcha_bilstm_2():
+    """
+    Predict the CAPTCHA using model with 2 layers BiLSTM.
+
+    Returns:
+        A JSON response containing the predicted CAPTCHA text.
+    """
+    return predict_captcha("2 layers BiLSTM", "BILSTM_2")
+
+def predict_captcha(model_name, model):
+    """
+    Predict the CAPTCHA using the specified model.
+
+    Args:
+        model_name (str): A string representing the model name.
+        model (keras.models.Model): The model object to use for prediction.
+
+    Returns:
+        A JSON response containing the predicted CAPTCHA text.
+    """
     file = request.files.get("file")
     uid = request.form.get("uid")
 
@@ -104,12 +88,12 @@ def predict_captcha_bilstm_2():
     file_path = os.path.join(STORAGE_PATH, filename)
     file.save(file_path)
 
-    prediction = BiLSTM_2.predict(prepare_data(file_path))
+    prediction = globals()[model].predict(prepare_data(file_path))
     predicted_text = decode_batch_predictions(prediction)
 
     clear_storage()
 
-    response_data = {"model": "1 layer LSTM", "prediction": str(*predicted_text)}
+    response_data = {"model": model_name, "prediction": str(*predicted_text)}
 
     if uid:
         response_data["uid"] = uid
