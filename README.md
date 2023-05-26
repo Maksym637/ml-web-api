@@ -89,11 +89,23 @@ The application works as follows:
 
 - After that, upload specific image (noisy CAPTCHA)
 
-**input:**
+**input1:**
 
-![](./data/captcha-7.png)
+![](./data/captcha-1.png)
 
 - The result is image recognition:
 
-**output:** `016ds9`
+**output1:** `00fggp`
+
+**input2:**
+
+![](./data/captcha-3.png)
+
+**output2**: `01uk0d`
+
+**input3:**
+
+![](./data/captcha-7.png)
+
+**output3:** `016ds9`
 - - -
