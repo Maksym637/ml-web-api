@@ -25,6 +25,7 @@ Here you can find a short description of main directories and it's content.
 |Keras           |2.12.0 |
 |Flask           |2.3.2  |
 |PyTest          |7.3.1  |
+
 **Note:** We use TensorFlow (CPU) as it takes much less memory while deploying application on _Heroku_ platform.
 - - -
 ### Indicators of trained models
@@ -39,6 +40,7 @@ As a result, we see that a model with 2 layers BiLSTM has the highest accuracy.
 - - -
 ### Launch project
 **Prerequisites:**
+
 Firstly, you need clone the repository with the command:
 ```sh
 git clone https://github.com/Maksym637/ml-web-api.git
@@ -62,6 +64,7 @@ pip install -r requirements.txt
 python run.py
 ```
 The Back-End will start on [http://localhost:5000](http://localhost:5000). 
+
 To interact with the application, you need also run the Front-End part. Here you can see instruction how to run it [ml-web-app](https://github.com/EyR1oN/ml-web-app).
 - #### Do it with Docker
 With Docker it will be much easeier. Simply run the following command:
@@ -80,10 +83,16 @@ docker-compose up tests
 - - -
 ### Program work
 The application works as follows:
+
 - Firstly, you specify the model type
+
 - After that, upload specific image (noisy CAPTCHA)
+
 **input:**
+
 ![](./data/captcha-7.png)
+
 - The result is image recognition:
+
 **output:** `016ds9`
 - - -
