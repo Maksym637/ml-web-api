@@ -86,26 +86,32 @@ docker-compose up tests
 The application works as follows:
 
 - Firstly, you specify the model type
-
 - After that, upload specific image (noisy CAPTCHA)
+- The result is image recognition
 
-**input1:**
+Some examples:
+
+**input for model with _1 layer LSTM_:**
 
 ![](./data/captcha-1.png)
 
-- The result is image recognition:
+**prediction is** `00fggp`
 
-**output1:** `00fggp`
-
-**input2:**
+**input for model with _2 layers LSTM_:**
 
 ![](./data/captcha-3.png)
 
-**output2**: `01uk0d`
+**prediction is**: `01uk0d`
 
-**input3:**
+**input for model with _1 layer BiLSTM_:**
 
 ![](./data/captcha-7.png)
 
-**output3:** `016ds9`
+**prediction is** `016ds9`
+
+**input for model with _2 layers BiLSTM_:**
+
+![](./data/captcha-10.png)
+
+**prediction is** `0ap6iv`
 - - -
