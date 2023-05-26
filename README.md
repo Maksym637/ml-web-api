@@ -36,6 +36,7 @@ Below you can see a table with the training results of all models:
 |2 layers LSTM   |0.92  |5.15  |94         |
 |1 layer BiLSTM  |6.55  |18.1  |88         |
 |2 layers BiLSTM |0.24  |1.41  |98         |
+
 As a result, we see that a model with 2 layers BiLSTM has the highest accuracy.
 - - -
 ### Launch project
