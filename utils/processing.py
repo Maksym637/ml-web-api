@@ -5,19 +5,18 @@ import string
 import numpy as np
 
 import tensorflow as tf
-from keras import layers, backend, models
+from keras import layers, backend, models, ops
 
 from .constants import MAX_LENGTH, IMAGE_WIDTH, IMAGE_HEIGHT, BATCH_SIZE
 
 CHARACTERS = sorted(list(string.ascii_lowercase) + list(string.digits))
 
-characters_to_numbers = layers.StringLookup(
-    vocabulary=CHARACTERS, mask_token=None
-)
+characters_to_numbers = layers.StringLookup(vocabulary=CHARACTERS, mask_token=None)
 
 numbers_to_characters = layers.StringLookup(
     vocabulary=characters_to_numbers.get_vocabulary(), mask_token=None, invert=True
 )
+
 
 def define_model(model):
     """
@@ -29,7 +28,40 @@ def define_model(model):
     Returns:
         keras.models.Model: The defined model with output layer.
     """
-    return models.Model(model.get_layer(name="image").input, model.get_layer(name="dense2").output)
+    return models.Model(
+        model.get_layer(name="image").output, model.get_layer(name="dense2").output
+    )
+
+
+#
+# The following function is the replacement to `keras.backend.ctc_decode`
+# due to the Tensorflow 3 update
+#
+def ctc_decode(y_pred, input_length, greedy=True, beam_width=100, top_paths=1):
+    input_shape = ops.shape(y_pred)
+    num_samples, num_steps = input_shape[0], input_shape[1]
+    y_pred = ops.log(ops.transpose(y_pred, axes=[1, 0, 2]) + backend.epsilon())
+    input_length = ops.cast(input_length, dtype="int32")
+
+    if greedy:
+        (decoded, log_prob) = tf.nn.ctc_greedy_decoder(
+            inputs=y_pred, sequence_length=input_length
+        )
+    else:
+        (decoded, log_prob) = tf.compat.v1.nn.ctc_beam_search_decoder(
+            inputs=y_pred,
+            sequence_length=input_length,
+            beam_width=beam_width,
+            top_paths=top_paths,
+        )
+    decoded_dense = []
+
+    for st in decoded:
+        st = tf.SparseTensor(st.indices, st.values, (num_samples, num_steps))
+        decoded_dense.append(tf.sparse.to_dense(sp_input=st, default_value=-1))
+
+    return (decoded_dense, log_prob)
+
 
 def decode_batch_predictions(pred):
     """
@@ -43,15 +75,17 @@ def decode_batch_predictions(pred):
         (The result will be the best prediction).
     """
     input_len = np.ones(pred.shape[0]) * pred.shape[1]
-    results = backend.ctc_decode(pred, input_length=input_len, greedy=True)[0][0][:, :MAX_LENGTH]
+    results = ctc_decode(pred, input_length=input_len, greedy=True)[0][0][
+        :, :MAX_LENGTH
+    ]
     output_text = []
 
     for res in results:
-        res = tf.gather(res, tf.where(tf.math.not_equal(res, -1)))
         res = tf.strings.reduce_join(numbers_to_characters(res)).numpy().decode("utf-8")
         output_text.append(res)
 
     return output_text
+
 
 def encode_single_sample_image(img_path):
     """
@@ -70,6 +104,7 @@ def encode_single_sample_image(img_path):
     img = tf.transpose(img, perm=[1, 0, 2])
     return {"image": img}
 
+
 def prepare_data(file_path):
     """
     Prepares the data from a file path and performs necessary preprocessing.
@@ -82,7 +117,7 @@ def prepare_data(file_path):
     """
     image = [file_path]
     data = tf.data.Dataset.from_tensor_slices(np.array(image))
-    data = (
-        data.map(encode_single_sample_image, num_parallel_calls=tf.data.AUTOTUNE).batch(BATCH_SIZE)
-    )
+    data = data.map(
+        encode_single_sample_image, num_parallel_calls=tf.data.AUTOTUNE
+    ).batch(BATCH_SIZE)
     return data

@@ -10,15 +10,16 @@ TEST_DATA_POSITIVE = [
     ("captcha-2.png", "00jphx"),
     ("captcha-3.png", "01uk0d"),
     ("captcha-4.png", "058zms"),
-    ("captcha-5.png", "004mqe")
+    ("captcha-5.png", "004mqe"),
 ]
 
 TEST_DATA_NEGATIVE = [
     ("/lstm1", "[No CAPTCHA uploaded]"),
     ("/lstm2", "[No CAPTCHA uploaded]"),
     ("/bilstm1", "[No CAPTCHA uploaded]"),
-    ("/bilstm2", "[No CAPTCHA uploaded]")
+    ("/bilstm2", "[No CAPTCHA uploaded]"),
 ]
+
 
 @pytest.mark.parametrize("image,expected_result", TEST_DATA_POSITIVE)
 def test_predict_lstm_1_positive(image, expected_result):
@@ -34,14 +35,12 @@ def test_predict_lstm_1_positive(image, expected_result):
     data = {"file": (open(captcha, "rb"), image)}
 
     response = client.post(
-        endpoint,
-        data=data,
-        buffered=True,
-        content_type="multipart/form-data"
+        endpoint, data=data, buffered=True, content_type="multipart/form-data"
     )
 
     assert response.status_code == 200
     assert response.get_json()["prediction"] == expected_result
+
 
 @pytest.mark.parametrize("image,expected_result", TEST_DATA_POSITIVE)
 def test_predict_lstm_2_positive(image, expected_result):
@@ -57,14 +56,12 @@ def test_predict_lstm_2_positive(image, expected_result):
     data = {"file": (open(captcha, "rb"), image)}
 
     response = client.post(
-        endpoint,
-        data=data,
-        buffered=True,
-        content_type="multipart/form-data"
+        endpoint, data=data, buffered=True, content_type="multipart/form-data"
     )
 
     assert response.status_code == 200
     assert response.get_json()["prediction"] == expected_result
+
 
 @pytest.mark.parametrize("image,expected_result", TEST_DATA_POSITIVE)
 def test_predict_bilstm_1_positive(image, expected_result):
@@ -80,14 +77,12 @@ def test_predict_bilstm_1_positive(image, expected_result):
     data = {"file": (open(captcha, "rb"), image)}
 
     response = client.post(
-        endpoint,
-        data=data,
-        buffered=True,
-        content_type="multipart/form-data"
+        endpoint, data=data, buffered=True, content_type="multipart/form-data"
     )
 
     assert response.status_code == 200
     assert response.get_json()["prediction"] == expected_result
+
 
 @pytest.mark.parametrize("image,expected_result", TEST_DATA_POSITIVE)
 def test_predict_bilstm_2_positive(image, expected_result):
@@ -103,14 +98,12 @@ def test_predict_bilstm_2_positive(image, expected_result):
     data = {"file": (open(captcha, "rb"), image)}
 
     response = client.post(
-        endpoint,
-        data=data,
-        buffered=True,
-        content_type="multipart/form-data"
+        endpoint, data=data, buffered=True, content_type="multipart/form-data"
     )
 
     assert response.status_code == 200
     assert response.get_json()["prediction"] == expected_result
+
 
 @pytest.mark.parametrize("endpoint,expected_result", TEST_DATA_NEGATIVE)
 def test_predict_model_negative(endpoint, expected_result):

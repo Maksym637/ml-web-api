@@ -9,15 +9,13 @@ from werkzeug.utils import secure_filename
 from utils.constants import STORAGE_PATH
 from utils.processing import prepare_data, decode_batch_predictions
 
-from app.load_models import (
-    load_lstm_1, load_lstm_2,
-    load_bilstm_1, load_bilstm_2
-)
+from app.load_models import load_lstm_1, load_lstm_2, load_bilstm_1, load_bilstm_2
 
 ai_model = Blueprint("ai_service", __name__)
 
 LSTM_1, LSTM_2 = load_lstm_1(), load_lstm_2()
 BILSTM_1, BILSTM_2 = load_bilstm_1(), load_bilstm_2()
+
 
 def clear_storage():
     """
@@ -26,6 +24,7 @@ def clear_storage():
     directory = STORAGE_PATH
     for file in os.listdir(directory):
         os.remove(os.path.join(directory, file))
+
 
 @ai_model.route("/lstm1", methods=["POST"])
 def predict_captcha_lstm_1():
@@ -37,6 +36,7 @@ def predict_captcha_lstm_1():
     """
     return predict_captcha("1 layer LSTM", "LSTM_1")
 
+
 @ai_model.route("/lstm2", methods=["POST"])
 def predict_captcha_lstm_2():
     """
@@ -46,6 +46,7 @@ def predict_captcha_lstm_2():
         A JSON response containing the predicted CAPTCHA text.
     """
     return predict_captcha("2 layers LSTM", "LSTM_2")
+
 
 @ai_model.route("/bilstm1", methods=["POST"])
 def predict_captcha_bilstm_1():
@@ -57,6 +58,7 @@ def predict_captcha_bilstm_1():
     """
     return predict_captcha("1 layer BiLSTM", "BILSTM_1")
 
+
 @ai_model.route("/bilstm2", methods=["POST"])
 def predict_captcha_bilstm_2():
     """
@@ -66,6 +68,7 @@ def predict_captcha_bilstm_2():
         A JSON response containing the predicted CAPTCHA text.
     """
     return predict_captcha("2 layers BiLSTM", "BILSTM_2")
+
 
 def predict_captcha(model_name, model):
     """
