@@ -1,7 +1,7 @@
 # CAPTCHA RECOGNITION
 ### `Back-End and ML parts`
 - - -
-Prepared by _Maksym Oliinyk_ and _Nazarii Hovdysh_
+Prepared by _Maksym Oliinyk_
 - - -
 ### Description
 The Noisy CAPTCHA Recognition project aims to develop an automated system capable of accuratly recognizing noisy CAPTCHA (Completely Automated Public Turing test to tell Computers and Humans Apart) images. The **dataset** you can see at the following link: [click here](https://www.kaggle.com/datasets/surenbobby/captchas-net).
